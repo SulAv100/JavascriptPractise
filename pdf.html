@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #pdf-container {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .filePlacer {
+      position: relative;
+      width: 100%;
+      /* Set the width to 100% */
+      height: 800px
+    }
+  </style>
+</head>
+
+<body>
+  <input type="file" accept=".pdf" multiple id="pdf-selector">
+  <div id="pdf-container"></div>
+  <script>
+    const pdfData = document.getElementById("pdf-selector");
+    const pdfContainer = document.getElementById("pdf-container");
+
+    pdfData.addEventListener("change", function () {
+      const pdfFiles = pdfData.files;
+      for (let i = 0; i < pdfFiles.length; i++) {
+        const pdfFile = pdfFiles[i];
+
+        if (pdfFile) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            const newElement = document.createElement("div");
+            newElement.classList.add("filePlacer");
+            const file = event.target.result;
+            newElement.innerHTML = `<embed src="${file}" type="application/pdf">`;
+            pdfContainer.appendChild(newElement);
+          }
+          reader.readAsDataURL(pdfFile);
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

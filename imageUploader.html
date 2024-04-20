@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+      padding: 0%;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    #image-container{
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .image-placement{
+      height: 600px;
+      width: 600px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      border: 1px dotted black;
+    }
+  </style>
+</head>
+<body>
+  <input type="file" accept="image/*" multiple id="image-placer" >
+  <div id="image-container"></div>
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded",function(){
+      const imageData = document.getElementById("image-placer");
+      const imagePlacer = document.getElementById("image-container");
+
+      imageData.addEventListener("change",function(event){
+        const imageData = document.getElementById("image-placer");
+      const imagePlacer = document.getElementById("image-container");
+        const imageFiles = imageData.files;
+        for(let i =0 ;i<imageFiles.length;i++){
+          const imageFile = imageFiles[i];
+          if(imageFile){
+            const reader = new FileReader();
+            reader.onload = function(event){
+              const image = event.target.result;
+              const newElement = document.createElement("div");
+              newElement.classList.add("image-placement");
+              newElement.style.backgroundImage = `url(${image})`;
+              newElement.style.backgroundPosition = "center";
+              imagePlacer.appendChild(newElement);
+            }
+            reader.readAsDataURL(imageFile);
+          }
+          
+
+        }
+
+      })
+
+    })
+  </script>
+</body>
+</html>

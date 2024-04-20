@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <script src="https://kit.fontawesome.com/fd6ad446c7.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fa-cart-shopping {
+            display: block;
+            font-size: 30px;
+            margin-right: 50px;
+            cursor: pointer;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .item {
+            width: 200px;
+            margin: 20px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .add-to-cart-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .cart-slider {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 95%;
+            background-color: #f4f4f4;
+            padding: 20px;
+            visibility: hidden;
+            transition: right 0.3s ease;
+        }
+
+        .cart-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .cart-items {
+            margin-bottom: 20px;
+        }
+
+        .checkout-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .checkout-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .cart-items {
+            border: 1px solid black;
+            height: 100%;
+            overflow: auto;
+        }
+
+        .cartItem {
+            background-color: lightblue;
+            border: 1px solid #ddd;
+            padding: 10px;
+            z-index: 100;
+            height: 60px;
+            top: 0;
+            margin-bottom: 10px;
+            position: relative;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .namePlace {
+            position: relative;
+            border: 1px solid black;
+            font-size: 18px;
+            height: 30px;
+            margin-right: 100px;
+        }
+
+        .pricePlace {
+            position: relative;
+            border: 1px solid red;
+            font-size: 25px;
+            float: right;
+            height: 50px;
+        }
+
+        sup {
+            position: relative;
+            top: -10px;
+        }
+
+        .header {
+            position: relative;
+            display: inline-flex;
+            border: 1px solid black;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px 0 10px;
+        }
+
+        .fa-rectangle-xmark {
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        #pricing {
+            position: relative;
+            display: inline-flex;
+            font-size: 20px;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Shopping Cart</h1>
+        <div class="cart-icon">
+            <i class="fa-solid fa-cart-shopping" onclick="toggleCart()"><sup id="notifiNum">0</sup></i>
+        </div>
+    </header>
+    <main>
+        <div class="item">
+            <h2 id="name">Item 1</h2>
+            <p id="amount">$10.00</p>
+            <button class="add-to-cart-btn">Add to Cart</button>
+        </div>
+        <div class="item">
+            <h2 id="name">Item 2</h2>
+            <p id="amount">$15.00</p>
+            <button class="add-to-cart-btn">Add to Cart</button>
+        </div>
+        <div class="item">
+            <h2 id="name">Item 3</h2>
+            <p id="amount">$20.00</p>
+            <button class="add-to-cart-btn">Add to Cart</button>
+        </div>
+    </main>
+    <div id="cart-slider" class="cart-slider">
+        <div class="cart-content">
+            <div class="header">
+                <h2>Your Cart</h2>
+                <i class="fa-regular fa-rectangle-xmark" onclick="toggleCart()"></i>
+            </div>
+            <div class="cart-items">
+            </div>
+            <div id="pricing">Subtotal Price: <span id="totalPrice">0</span></div>
+            <button class="checkout-btn">Checkout</button>
+        </div>
+    </div>
+    <script>
+        function toggleCart() {
+            const status = document.getElementById("cart-slider");
+            if (status.style.visibility === "hidden") {
+                status.style.visibility = "visible";
+            } else {
+                status.style.visibility = "hidden";
+            }
+        }
+
+        const addButtons = document.querySelectorAll(".add-to-cart-btn");
+        let cartItems =[];
+        addButtons.forEach(function(button){
+            button.addEventListener("click",function(event){
+                const selectedParent = event.target.closest(".item");
+                const selectedProduct = selectedParent.querySelector("#name").innerText;
+                const initialPrice = selectedParent.querySelector("#amount").innerText;
+                const finalPrice = parseInt(initialPrice.replace('$',''));
+
+                let existingItemIndex = cartItems.findIndex(item => item.name === selectedProduct);
+                if(existingItemIndex !== -1){
+                    cartItems[existingItemIndex].quantity++;
+                }else{
+                    cartItems.push({name: selectedProduct, quantity:1, price: finalPrice});
+                }
+                localStorage.setItem('cartItems',JSON.stringify(cartItems));
+                updateCart();
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded",function(){
+            const storedData = JSON.parse(localStorage.getItem('cartItems'));
+            if(storedData){
+                storedData.forEach(function(item){
+                    cartItems.push(item);
+                });
+                updateCart();
+
+            }
+        });
+        
+
+        
+
+        function updateCart(){
+            const items = document.querySelector(".cart-items");
+            items.innerHTML= "";
+            cartItems.forEach(function(item){
+                const newElement = document.createElement("div");
+                newElement.classList.add("cartItem");
+                const nameElement = document.createElement("span");
+                nameElement.classList.add("namePlace");
+                nameElement.innerText = item.name;
+                newElement.appendChild(nameElement);
+                const quantityElement = document.createElement("span");
+                quantityElement.classList.add("quantityPlace");
+                quantityElement.innerText = item.quantity;
+                newElement.appendChild(quantityElement);
+                const priceElement = document.createElement("span");
+                priceElement.classList.add("pricePlace");
+                priceElement.innerText = "$"+(item.quantity*item.price).toFixed(2);
+                newElement.appendChild(priceElement);
+                items.appendChild(newElement);
+                updateNotification();
+                updateTotal();
+            });
+
+        }
+        function updateNotification(){
+            let counter = 0;
+            cartItems.forEach(function(item){
+                counter+= item.quantity;
+            })
+            document.getElementById("notifiNum").innerText = counter;
+        }
+        function updateTotal(){
+            let counter = 0;
+            cartItems.forEach(function(item){
+                counter+= item.quantity*item.price;
+            })
+            document.getElementById("totalPrice").innerText = "$"+counter.toFixed(2);
+        }
+
+
+    </script>
+</body>
+
+</html>

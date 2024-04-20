@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .cart {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .item {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .name {
+            flex: 1;
+        }
+
+        .price {
+            margin-right: 10px;
+        }
+
+        .add-btn,
+        .remove-btn {
+            padding: 8px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .add-btn:hover,
+        .remove-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Shopping Cart</h2>
+        <div class="cart" id="cart">
+            <div class="item">
+                <span class="name">Apple</span>
+                <span class="price">$1.00</span>
+                <button class="add-btn">Add</button>
+                <button class="remove-btn">Remove</button>
+            </div>
+            <div class="item">
+                <span class="name">Banana</span>
+                <span class="price">$0.50</span>
+                <button class="add-btn">Add</button>
+                <button class="remove-btn">Remove</button>
+            </div>
+            <div class="item">
+                <span class="name">Orange</span>
+                <span class="price">$0.75</span>
+                <button class="add-btn">Add</button>
+                <button class="remove-btn">Remove</button>
+            </div>
+        </div>
+        <p id="total">Total cost: <span id="total-cost">$0.00</span></p>
+    </div>
+    <script>
+        const addButtons = document.querySelectorAll(".add-btn");
+        let count = 0;
+        addButtons.forEach(function(addbtn){
+            addbtn.addEventListener("click",function(event){
+                const item = event.target.closest(".item");
+                const values = item.querySelector(".price").innerText;
+                const value = parseFloat(values.replace('$',''));
+                count+= value;
+                document.getElementById("total-cost").innerText = "$"+count.toFixed(2);
+            })
+        })
+        const delButtons = document.querySelectorAll(".remove-btn");
+        delButtons.forEach(function(delbtn){
+            delbtn.addEventListener("click",function(event){
+                let counter = 0;
+                const initialValue = document.getElementById("total-cost").innerText;
+                const initial = parseFloat(initialValue.replace('$',''));
+                const item = event.target.closest(".item");
+                const value = item.querySelector(".price").innerText;
+                const val = parseFloat(value.replace('$',''));
+                
+                counter = initial - val;
+                document.getElementById("total-cost").innerText = "$"+ counter.toFixed(2);
+            })
+        })
+
+
+
+    </script>
+</body>
+
+</html>
