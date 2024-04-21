@@ -257,14 +257,20 @@
                 const datas = JSON.parse(localStorage.getItem('history'));
                 const historyContainer = document.getElementById("completion");
                 historyContainer.innerHTML= "";
+                if(datas){
+
+                
                 datas.forEach(function(data){
                     const anotherElement = document.createElement("div");
                     anotherElement.classList.add("done");
                     anotherElement.innerText = data.value;
                     historyContainer.appendChild(anotherElement);
-
-                })
-            })
+;
+                });
+            }else{
+                console.log("Its empmty right now");
+            }
+            });
         }
         let history=[];
         document.querySelector("#task-list").addEventListener("change", function (event) {
@@ -293,8 +299,11 @@
                     historyContainer.appendChild(anotherElement);
                     
                     localData.splice(deleteItem, 1);
+                    cartItems.splice(deleteItem,1);
+                    localStorage.setItem('cartItems', JSON.stringify(localData));
+                    console.log(cartItems);
+
                 }
-                localStorage.setItem('cartItems', JSON.stringify(localData));
             }
         });
         document.addEventListener("DOMContentLoaded", function () {
