@@ -1,4 +1,3 @@
-
 <!-------------------------------------------------------------not focusing on UI only focusing on functionality------------------------------------------>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,6 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do Web App</title>
+    <script src="https://kit.fontawesome.com/fd6ad446c7.js" crossorigin="anonymous"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -103,12 +104,102 @@
             margin-bottom: 30px;
             justify-content: space-evenly;
         }
+
+        .fa-list {
+            position: relative;
+            font-size: 30px;
+            cursor: pointer;
+            font-weight: bolder;
+            float: right;
+
+        }
+
+        #completedTask {
+            position: absolute;
+            align-items: center;
+
+        }
+
+        .slider {
+            position: absolute;
+            border: 1px solid black;
+            width: 30%;
+            height: 99.8%;
+            top: 0;
+            right: 0;
+            z-index: 100;
+            background-color: #898e89;
+            visibility: hidden;
+        }
+
+        #header {
+            width: 100%;
+            position: relative;
+            align-items: center;
+            display: inline-flex;
+            justify-content: space-between;
+        }
+
+        h2 {
+            color: black;
+            position: relative;
+            margin-left: 5%;
+
+        }
+
+        .fa-x {
+            position: inherit;
+            right: 5%;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        #completion {
+            height: 89%;
+            background-color: white;
+            margin: -5px 10px 0 10px;
+            overflow: auto;
+        }
+
+        .done {
+            background-color: #6cf96c;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            width: 100%;
+            height: max-content;
+            margin-bottom: 10px;
+        }
+
+        #header button {
+            position: relative;
+            margin-right: 20px;
+            font-size: 20px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 
 <body>
+    <div class="slider">
+        <div id="header">
+            <h2>History</h2>
+            <button onclick="clearShit()">Clear History</button>
+
+            <i class="fa-solid fa-x" onclick="removeSlider()"></i>
+
+        </div>
+        <div id="completion">
+
+        </div>
+
+    </div>
+
     <div class="container">
+        <i class="fa-solid fa-list"></i>
         <h1>To-Do List</h1>
+
+
         <div id="add-task-form">
             <input type="text" id="new-task-input" placeholder="Add a new task...">
             <button id="submit" onclick="submitTask()">Add Task</button>
@@ -116,7 +207,9 @@
         <div id="task-list">
 
         </div>
+
     </div>
+
     <script>
         let cartItems = [];
 
@@ -125,48 +218,120 @@
 
             const data = document.getElementById("new-task-input").value;
             if (data.length >= 1) {
-                cartItems.push({data : data});
+                cartItems.push({ data: data });
                 localStorage.setItem('cartItems', JSON.stringify(cartItems));
-                dataPlacement.innerHTML="";
-                console.log(cartItems);
-                cartItems.forEach(function(item,index) {
-                    const newElement = document.createElement("div");
-                    newElement.classList.add("mainContainer");
-                    const symbolNum = document.createElement("span");
-                    symbolNum.classList.add("counting");
-                    symbolNum.innerText = "Task:" + (index+1);
-                    console.log(symbolNum.innerText);
-                    const dataElement = document.createElement("div");
-                    dataElement.classList.add("dataPlacer");
-                    dataElement.innerText = item.data;
-                    const statusElement = document.createElement("input");
-                    statusElement.setAttribute("type", "checkbox");
-                    statusElement.classList.add("checking");
-                    newElement.appendChild(symbolNum);
-                    newElement.appendChild(dataElement);
-                    newElement.appendChild(statusElement);
-                    dataPlacement.appendChild(newElement);
-                    
-                    document.getElementById("new-task-input").value = "";
+                updateTodo();
 
-
-                });
-                
-            }else{
+            } else {
                 alert("You need to write at least something");
             }
         }
-        document.querySelector("#task-list").addEventListener("change",function(event){
-            if(event.target.classList.contains("checking")){
+        function updateTodo() {
+            const dataPlacement = document.getElementById("task-list");
+
+            dataPlacement.innerHTML = "";
+            console.log(cartItems);
+            cartItems.forEach(function (item, index) {
+                const newElement = document.createElement("div");
+                newElement.classList.add("mainContainer");
+                const symbolNum = document.createElement("span");
+                symbolNum.classList.add("counting");
+                symbolNum.innerText = "Task:" + (index + 1);
+                console.log(symbolNum.innerText);
+                const dataElement = document.createElement("div");
+                dataElement.classList.add("dataPlacer");
+                dataElement.innerText = item.data;
+                const statusElement = document.createElement("input");
+                statusElement.setAttribute("type", "checkbox");
+                statusElement.classList.add("checking");
+                newElement.appendChild(symbolNum);
+                newElement.appendChild(dataElement);
+                newElement.appendChild(statusElement);
+                dataPlacement.appendChild(newElement);
+
+                document.getElementById("new-task-input").value = "";
+
+
+            });
+            history.forEach(function(history){
+                const datas = JSON.parse(localStorage.getItem('history'));
+                const historyContainer = document.getElementById("completion");
+                historyContainer.innerHTML= "";
+                datas.forEach(function(data){
+                    const anotherElement = document.createElement("div");
+                    anotherElement.classList.add("done");
+                    anotherElement.innerText = data.value;
+                    historyContainer.appendChild(anotherElement);
+
+                })
+            })
+        }
+        let history=[];
+        document.querySelector("#task-list").addEventListener("change", function (event) {
+            if (event.target.classList.contains("checking")) {
                 const selectedParent = event.target.closest(".mainContainer");
                 selectedParent.style.display = "none";
                 const taskNumber = selectedParent.querySelector(".counting").innerText;
 
-                alert("Congrats for completing:"+ taskNumber);
-            }
-        })
-        
 
+                alert("Congrats for completing:" + taskNumber);
+                const localData = JSON.parse(localStorage.getItem('cartItems'));
+                const dataToDeleteFromLocalStorage = selectedParent.querySelector(".dataPlacer").innerText;
+                const deleteItem = localData.findIndex(item => item.data === dataToDeleteFromLocalStorage);
+                const completionTask = document.querySelector("#completion");
+                const dataToPush = dataToDeleteFromLocalStorage;
+                history.push({value: dataToPush});
+                const historyContainer = document.getElementById("completion");
+
+
+                
+                localStorage.setItem('history', JSON.stringify(history));   
+                if (deleteItem !== -1) {
+                    const anotherElement = document.createElement("div");
+                    anotherElement.classList.add("done");
+                    anotherElement.innerText = dataToPush;
+                    historyContainer.appendChild(anotherElement);
+                    
+                    localData.splice(deleteItem, 1);
+                }
+                localStorage.setItem('cartItems', JSON.stringify(localData));
+            }
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            const dataItems = JSON.parse(localStorage.getItem('cartItems'));
+            if (dataItems) {
+                dataItems.forEach(function (item) {
+                    cartItems.push(item);
+                });
+            }
+            const historyItems = JSON.parse(localStorage.getItem('history'));
+            if(historyItems){
+                historyItems.forEach(function(hItem){
+                    history.push(hItem);
+                });
+            }
+
+            updateTodo();
+        })
+        document.querySelector(".fa-list").addEventListener("click", function () {
+            const sliderInformation = document.querySelector(".slider");
+            sliderInformation.style.visibility = "visible";
+        })
+
+        function removeSlider() {
+            const sliderInfo = document.querySelector(".slider");
+            const crossMark = document.querySelector(".fa-x");
+            if (crossMark) {
+                sliderInfo.style.visibility = "hidden";
+            }
+        }
+        function clearShit() {
+            const dataToRemove = document.querySelectorAll(".done");
+            dataToRemove.forEach(function (data) {
+                data.style.display = "none";
+            });
+            localStorage.removeItem('history');
+        }
 
     </script>
 </body>
