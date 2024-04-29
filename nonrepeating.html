@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .inputBox {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Longest running characters</h1>
+
+    <div class="inputBox">
+      <input type="text" id="inputValue" />
+      <button onclick="getLongCharacter()">Submit</button>
+      <div>
+        <span class="youdata">Hello</span>
+      </div>
+    </div>
+
+    <script>
+      let longArray = [];
+
+      function getLongCharacter() {
+        const value = document.getElementById("inputValue").value;
+        const data = value.split("");
+        console.log(data);
+
+        let runningArray = [];
+        for (let i = 0; i < data.length; i++) {
+          if (data[i] !== data[i + 1]) {
+            runningArray.push(data[i]);
+          } else {
+            if (runningArray.length > longArray.length) {
+              longArray = runningArray;
+            }
+            runningArray = [];
+          }
+        }
+
+        if (longArray.length < runningArray.length) {
+          longArray = runningArray;
+        }
+
+        document.querySelector(".youdata").textContent = longArray.join("");
+      }
+    </script>
+  </body>
+</html>

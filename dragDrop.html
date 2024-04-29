@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            overflow: auto;
+        }
+
+        .draggable{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);   
+            height: 300px;
+            width: 300px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="draggable">
+
+    </div>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded",function(){
+
+
+            let offsetX, offsetY;
+            let isDraggable = true;
+
+            const itemToMove = document.querySelector(".draggable");
+            itemToMove.addEventListener('mousedown',startDrag);
+            document.addEventListener('mousemove',drag);
+            document.addEventListener('mouseup',stopDrag);
+
+
+
+            function startDrag(event){
+                isDraggable = true;
+                offsetX = event.clientX - itemToMove.getBoundingClientRect().left;
+                offsetY = event.clientY - itemToMove.getBoundingClientRect().top;
+            }
+
+
+            function drag(event){
+                if(isDraggable){
+                    itemToMove.style.left = event.clientX - offsetX +'px';
+                    itemToMove.style.top = event.clientY - offsetY +'px';
+                }
+            }
+
+            function stopDrag(){
+                isDraggable= false;
+            }
+        })
+
+    </script>
+</body>
+</html>

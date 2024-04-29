@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      .chessHeading {
+        position: relative;
+        display: block;
+        width: 100%;
+        text-align: center;
+      }
+      .chessHeading > h1 {
+        width: auto;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        color: rgb(246, 25, 61);
+      }
+      .chessBoard {
+        position: absolute;
+        border: 1px solid black;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 550px;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+      }
+      .whiteBox {
+        height: 20px;
+      }
+      .blackBox {
+        background-color: rgb(192, 185, 185);
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- lets learn about the drag drop and auto image placer first then we will continue -->
+    <div class="chessHeading">
+      <h1>Chess Game</h1>
+    </div>
+
+    <div class="chessBoard"></div>
+  </body>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const chessBoard = document.querySelector(".chessBoard");
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          const square = document.createElement("div");
+          square.classList.add((i + j) % 2 === 0 ? "whiteBox" : "blackBox");
+          chessBoard.appendChild(square);
+        }
+      }
+    });
+  </script>
+</html>
