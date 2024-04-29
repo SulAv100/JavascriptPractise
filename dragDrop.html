@@ -10,59 +10,148 @@
             padding: 0;
             box-sizing: border-box;
         }
-        body{
-            overflow: auto;
-        }
-
         .draggable{
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%,-50%);   
-            height: 300px;
-            width: 300px;
-            background-color: red;
+            transform: translate(-50%,-50%);
+            height: 200px;
+            width: 200px;
+            background-color: rgb(8, 96, 67);
+            justify-content: center;
+            border-radius: 20px;
+        }
+        .draggable >input{
+            position: inherit;
+            height: 20%;
+            width: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            border: 5px solid rgb(0, 0, 0);
+            padding: 20px;
+            border-radius: 10px;
+            outline: none;
+        }
+        .draggedAnswer{
+            position: absolute;
+            border: 1px solid black;
+            height: 200px;
+            width: 200px;
+            text-align: center;
+            background-color: black;
+            border-radius: 10px;
+            
+        }
+        .draggedAnswer > span{
+            position: inherit;
+            border: 1px solid black;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            border-radius: 10px;
+            background-color: white;
+            height: 20%;
+            width: 100%;
+            padding: 10px;
         }
     </style>
 </head>
 <body>
     <div class="draggable">
-
+        <input type="text"  id="insertedValue">
     </div>
 
+    <div class="draggedAnswer">
+        <span> Your answer: <p id="answerHere"></p></span>
+    </div>
+
+
     <script>
+        const itemDragger = document.querySelector(".draggable");
+        itemDragger.addEventListener("mousedown",startDrag);
+        document.addEventListener("mousemove",drag);
+        document.addEventListener("mouseup",stopDrag);
 
-        document.addEventListener("DOMContentLoaded",function(){
+        let offsetX, offsetY;
+        let draggable = false;
+        function startDrag(event){
+            console.log("Event is triggered");
+            draggable = true;
 
+            offsetX = event.clientX - itemDragger.getBoundingClientRect().left;
+            offsetY = event.clientY - itemDragger.getBoundingClientRect().top;
+        }
 
-            let offsetX, offsetY;
-            let isDraggable = true;
-
-            const itemToMove = document.querySelector(".draggable");
-            itemToMove.addEventListener('mousedown',startDrag);
-            document.addEventListener('mousemove',drag);
-            document.addEventListener('mouseup',stopDrag);
-
-
-
-            function startDrag(event){
-                isDraggable = true;
-                offsetX = event.clientX - itemToMove.getBoundingClientRect().left;
-                offsetY = event.clientY - itemToMove.getBoundingClientRect().top;
+        function drag(event){
+            if(draggable){
+                itemDragger.style.left = event.clientX - offsetX+'px';
+                itemDragger.style.top = event.clientY - offsetY+'px';
             }
+        }
+        function stopDrag(){
+            draggable = false;
+        }
+
+        const aitemDragger = document.querySelector(".draggedAnswer");
+        aitemDragger.addEventListener("mousedown",astartDrag);
+        document.addEventListener("mousemove",adrag);
+        document.addEventListener("mouseup",astopDrag);
+
+        let aoffsetX, aoffsetY;
+        let adraggable = false;
+        function astartDrag(event){
+            console.log("Event is triggered");
+            adraggable = true;
+
+            aoffsetX = event.clientX - aitemDragger.getBoundingClientRect().left;
+            aoffsetY = event.clientY - aitemDragger.getBoundingClientRect().top;
+        }
+
+        function adrag(event){
+            if(adraggable){
+                aitemDragger.style.left = event.clientX - aoffsetX+'px';
+                aitemDragger.style.top = event.clientY - aoffsetY+'px';
+            }
+        }
+        function astopDrag(){
+            adraggable = false;
+        }
 
 
-            function drag(event){
-                if(isDraggable){
-                    itemToMove.style.left = event.clientX - offsetX +'px';
-                    itemToMove.style.top = event.clientY - offsetY +'px';
+
+        let LongestArray =[];
+
+        const data = document.getElementById("insertedValue");
+        data.addEventListener("input",function(){
+            let extractedData = data.value;
+            const seperatedData = extractedData.split("");
+            let runningArray = [];
+            
+            
+            for(let i = 0; i<seperatedData.length;i++){
+                if(seperatedData[i] !== seperatedData[i+1]){
+                    runningArray.push(seperatedData[i]);
+                }else{
+                    if(LongestArray.length < runningArray.length){
+                        LongestArray = runningArray;
+                    }
+                    runningArray = [];
+
                 }
             }
+            if(LongestArray.length < runningArray.length){
+                        LongestArray = runningArray;
+                    }
+            
 
-            function stopDrag(){
-                isDraggable= false;
-            }
-        })
+            document.getElementById("answerHere").textContent = LongestArray.join("");
+        });
+
+
+
+         
+
 
     </script>
 </body>
