@@ -1,31 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <h1 style="position: absolute; width: 100%; text-align: center;">Hello</h1>
+  </head>
+  <body>
+    <h1 style="position: absolute; width: 100%; text-align: center">Hello</h1>
     <script>
-        const array =[2,7,11,4,-2];
-        let updatedArray =[];
-        
-        let currentCount =0;
+      const array = [2, 7, 11, 4, -2];
+      let updatedArray = [];
 
-        for(let i =0;i<array.length;i++){
-            for(let j =0;j<array.length;j++){
-                if(i!==j){
-                    currentCount+=array[j];
-                }
-            }
-            updatedArray.push(currentCount);
-            currentCount=0;
+      let currentCount = 0;
+
+      for (let i = 0; i < array.length; i++) {
+        for (let j = 0; j < array.length; j++) {
+          if (i !== j) {
+            currentCount += array[j];
+          }
         }
-        console.log(updatedArray);
+        updatedArray.push(currentCount);
+        currentCount = 0;
+      }
+      console.log(updatedArray);
 
+      const anotherArray = [5, 7, 9, 11, 15, 17];
+      let count = 0;
+      let oddArray = 0;
+      let remainder = 0;
+      let divider1 = anotherArray[1] - anotherArray[0];
+      let divider2 = anotherArray[2] - anotherArray[1];
 
-        
+      if (divider1 === divider2) {
+        for (let i = 0; i < anotherArray.length; i++) {
+          count = (anotherArray[i] + anotherArray[i + 1]) / divider1;
+          remainder = count % 2;
+          if (remainder !== 0) {
+            console.log(count);
+            break;
+          }
+        }
+      }
     </script>
-</body>
+  </body>
 </html>
