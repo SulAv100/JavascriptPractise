@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const string = "This is java script";
+        const newData = string.split(" ");
+        let splittedData;
+        let joinedData;
+        let newArray =[];
+        let finalArray=[];
+        let newestWord;
+        let anotherArray =[];
+
+        newData.forEach(function(item){
+            splittedData = item.split("");
+            for(let i=splittedData.length;i>=0;i--){
+                newArray.push(splittedData[i]);
+            }
+            joinedData = newArray.join("");
+            finalArray.push(joinedData);
+
+
+            newArray=[];
+
+        })
+       let finalData = finalArray.join(" ");
+        // console.log(finalData);
+
+
+        let reversedString = newData.map(word=>{
+             newestWord = word.split("").reverse().join("");
+             anotherArray.push(newestWord);
+
+        })
+        let finalData1 = anotherArray.join(" ");
+        console.log(finalData1);
+    </script>
+</body>
+</html>
